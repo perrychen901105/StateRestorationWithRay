@@ -40,6 +40,9 @@ class PetEditViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    restorationIdentifier = "PetEditViewController"
+    //UIKit needs to know where to get the view controller reference. Add the following code just below the point where you assign restorationIdentifier:
+    restorationClass = PetEditViewController.self
     
     view.backgroundColor = UIColor.whiteColor()
     
@@ -112,4 +115,11 @@ class PetEditViewController: UIViewController {
     
     super.decodeRestorableStateWithCoder(coder)
   }
+}
+//return an instance of the class
+extension PetEditViewController: UIViewControllerRestoration {
+    static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
+        let vc = PetEditViewController()
+        return vc
+    }
 }

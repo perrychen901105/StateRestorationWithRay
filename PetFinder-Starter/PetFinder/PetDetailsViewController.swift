@@ -55,4 +55,25 @@ class PetDetailsViewController: UIViewController {
     nameAgeLabel.text = "\(currentPet.name), \(currentPet.age)"
     profilePictureImageView.image = UIImage(data: currentPet.imageData)
   }
+    
+    override func encodeRestorableStateWithCoder(coder: NSCoder) {
+        // 1
+        // if an ID exists for your current cat, save it using the provided encoder so you can reterieve it later
+        if let petId = petId {
+            coder.encodeInteger(petId, forKey: "petId")
+        }
+        // 2
+        // Make sure to call super so the rest of the inherited state restoration functionality will happen as expected.
+        super.encodeRestorableStateWithCoder(coder)
+    }
+    
+    override func decodeRestorableStateWithCoder(coder: NSCoder) {
+        petId = coder.decodeIntegerForKey("petId")
+        super.decodeRestorableStateWithCoder(coder);
+    }
+    
+    override func applicationFinishedRestoringState() {
+        guard let petId = petId else { return }
+        currentPet = MatchedPetsManager.sharedManager.petForId(petId)
+    }
 }
